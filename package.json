@@ -1,7 +1,7 @@
 {
-  "name": "react-three-vite",
+  "name": "Sim City Clone",
   "version": "1.0.2",
-  "description": "A simple React Three Fiber + Vite starter with an import-ready CodeSandbox config.",
+  "description": "A very rudimentary version of Sim City in React Three Fiber",
   "keywords": [
     "r3f",
     "react",
@@ -12,15 +12,18 @@
     "sandbox",
     "codesandbox"
   ],
-  "author": "Benjamin Miles <talk@benjaminmiles.com> (https://github.com/benjaminmiles)",
-  "repository": "github:benjaminmiles/react-three-vite",
+  "type": "module",
+  "author": "Dwaine Matthew <dwainejade@gmail.com> (https://github.com/dwainejade)",
+  "repository": "github:dwainejade/react-three-city",
   "license": "MIT",
   "dependencies": {
     "@react-three/drei": "9.105.5",
     "@react-three/fiber": "8.16.2",
+    "leva": "^0.9.35",
     "react": "18.3.1",
     "react-dom": "18.3.1",
-    "three": "0.164.1"
+    "three": "0.164.1",
+    "zustand": "^4.5.2"
   },
   "devDependencies": {
     "@vitejs/plugin-react": "^4.2.1",

@@ -1,0 +1,56 @@
+.menu-wrapper {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  pointer-events: none;
+}
+.menu-wrapper .bottom-wrapper {
+  position: absolute;
+  pointer-events: auto;
+  bottom: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(255, 255, 255, 0.8);
+  padding: 10px;
+  border-radius: 10px;
+}
+.menu-wrapper .bottom-wrapper .category-wrapper,
+.menu-wrapper .bottom-wrapper .object-wrapper {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 10px;
+}
+.menu-wrapper .bottom-wrapper button {
+  margin: 5px;
+  padding: 10px;
+  font-size: 14px;
+  pointer-events: auto;
+}
+.menu-wrapper .bottom-wrapper .category-btn.active {
+  background-color: #ccc;
+}
+.menu-wrapper .bottom-wrapper .remove-object-con {
+  margin-top: 10px;
+}
+.menu-wrapper .bottom-wrapper .btn-con {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.menu-wrapper .cell-info-wrapper {
+  position: absolute;
+  top: 30%;
+  right: 1%;
+  width: 200px;
+  height: fit-content;
+  border-radius: 5px;
+  padding: 1em;
+  pointer-events: auto;
+  background-color: #ccc;
+}
