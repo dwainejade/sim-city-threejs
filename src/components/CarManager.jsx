@@ -1,49 +1,91 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Car from './Car';
 import { useGridStore } from '../store/gridStore';
 import { getNeighboringRoadCell } from '../utils/helpers';
 
+const MAX_CARS = 100;
+const CARS_PER_APARTMENT = 10;
+const CAR_RETURN_DELAY = 5000; // Time in milliseconds before the car returns
+
+const CAR_COLORS = [
+    '#fca60c', '#bb439a', '#c0dded', '#08a8e5', '#79ce5b', '#755d56', '#fcd413', '#a4a6ca', '#8e23b6', '#ee2265',
+    '#1fd1dc', '#1a5d31', '#331f94', '#e2785e', '#f7401d', '#244eb4', '#74a76b', '#116864', '#e7a69b', '#5c3830',
+    '#660ea0', '#fce186', '#138486', '#f090c8', '#5f8094', '#fcf35c', '#5c64c4', '#af4bc4', '#04a6a6', '#a3044c',
+    '#fc7804', '#ab73d3', '#da66cb', '#33a32b', '#d31b1a', '#0474d4', '#fc534c', '#fb5c14', '#3f3cac', '#44b42c',
+    '#3c3a3a'
+];
+
+const getRandomColor = () => {
+    return CAR_COLORS[Math.floor(Math.random() * CAR_COLORS.length)];
+};
+
 const CarManager = ({ waypoints }) => {
-    const { cells, gridSize } = useGridStore();
+    const { cells } = useGridStore();
     const [cars, setCars] = useState([]);
+    const apartments = useRef([]);
+    const stores = useRef([]);
+    const carSpawnInterval = useRef(null);
 
     useEffect(() => {
-        const houses = [];
-        const stores = [];
-        const newCars = [];
+        const newApartments = [];
+        const newStores = [];
 
-        // Identify houses and stores
         cells.forEach((row, rowIndex) => {
             row.forEach((cell, colIndex) => {
                 if (cell.type === 'building' && cell.subtype === 'apartment') {
-                    houses.push({ row: rowIndex, col: colIndex });
+                    newApartments.push({ row: rowIndex, col: colIndex });
                 } else if (cell.type === 'building' && cell.subtype === 'store') {
-                    stores.push({ row: rowIndex, col: colIndex });
+                    newStores.push({ row: rowIndex, col: colIndex });
                 }
             });
         });
 
-        // Generate cars
-        houses.forEach((house) => {
-            const startCell = getNeighboringRoadCell(house.row, house.col, cells);
-            // console.log({ house, startCell });
-            if (startCell) {
-                const randomStore = stores[Math.floor(Math.random() * stores.length)];
-                if (randomStore === undefined) return;
-                const destinationCell = getNeighboringRoadCell(randomStore.row, randomStore.col, cells);
-                if (destinationCell) {
-                    newCars.push({ id: `${house.row}-${house.col}`, start: startCell, destination: destinationCell });
-                }
-            }
-        });
-
-        setCars(newCars);
+        apartments.current = newApartments;
+        stores.current = newStores;
     }, [cells]);
+
+    useEffect(() => {
+        carSpawnInterval.current = setInterval(spawnCar, 1000); // Try to spawn a car every 1 second
+        return () => clearInterval(carSpawnInterval.current);
+    }, []);
+
+    const spawnCar = () => {
+        if (cars.length >= MAX_CARS || apartments.current.length === 0 || stores.current.length === 0) return;
+
+        const randomApartment = apartments.current[Math.floor(Math.random() * apartments.current.length)];
+        if (randomApartment === undefined) return;
+        const startCell = getNeighboringRoadCell(randomApartment.row, randomApartment.col, cells);
+        if (!startCell) return;
+
+        const randomStore = stores.current[Math.floor(Math.random() * stores.current.length)];
+        if (randomStore === undefined) return;
+
+        const destinationCell = getNeighboringRoadCell(randomStore.row, randomStore.col, cells);
+        if (!destinationCell) return;
+
+        const carId = `${randomApartment.row}-${randomApartment.col}-${Date.now()}`;
+        const carColor = getRandomColor();
+        setCars((prevCars) => [...prevCars, { id: carId, start: startCell, destination: destinationCell, color: carColor }]);
+    };
+
+    const handleCarArrival = (carId) => {
+        setTimeout(() => {
+            setCars((prevCars) => prevCars.filter((car) => car.id !== carId));
+        }, CAR_RETURN_DELAY);
+    };
 
     return (
         <>
             {cars.map((car) => (
-                <Car key={car.id} carId={car.id} start={car.start} destination={car.destination} waypoints={waypoints} color='orange' />
+                <Car
+                    key={car.id}
+                    carId={car.id}
+                    start={car.start}
+                    destination={car.destination}
+                    waypoints={waypoints}
+                    onArrival={handleCarArrival}
+                    color={car.color}
+                />
             ))}
         </>
     );
