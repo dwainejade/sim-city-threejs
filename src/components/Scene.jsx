@@ -18,11 +18,11 @@ const Scene = () => {
 
             <OrbitControls
                 // maxAzimuthAngle={Math.PI / 4}
-                maxPolarAngle={Math.PI / 2.5}
+                // maxPolarAngle={Math.PI / 2.5}
                 maxDistance={10000}
                 minDistance={15}
                 zoomSpeed={1}
-            // enableRotate={false}
+                enableRotate={false}
             />
             <Sky sunPosition={[100, 100, 100]} />
             <Lights />

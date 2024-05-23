@@ -4,7 +4,8 @@ import { useThree } from '@react-three/fiber';
 import { useGridStore } from '../store/gridStore';
 import { useObjectStore } from '../store/objectStore';
 import { Apartment, Shop, Trees, Road2 } from './objects/CityPack';
-import Car from './Car';
+import CarManager from './CarManager';
+
 const Grid = () => {
     const { gridSize, cells, initializeGrid, selectedCells, setSelectedCells, placeObject, clearCell, roads, waypoints } = useGridStore();
     const { objects } = useObjectStore();
@@ -211,7 +212,7 @@ const Grid = () => {
             ))}
 
             {/* Render cars */}
-            <Car waypoints={waypoints} />
+            <CarManager waypoints={waypoints} />
         </group>
     );
 };
