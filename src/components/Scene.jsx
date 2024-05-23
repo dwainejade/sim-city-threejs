@@ -22,7 +22,7 @@ const Scene = () => {
                 maxDistance={10000}
                 minDistance={15}
                 zoomSpeed={1}
-                enableRotate={false}
+            // enableRotate={false}
             />
             <Sky sunPosition={[100, 100, 100]} />
             <Lights />

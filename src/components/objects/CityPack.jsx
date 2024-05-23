@@ -85,3 +85,18 @@ export const Trees = (props) => {
     );
 };
 
+export const Car = (props) => {
+    const { nodes, materials } = useGLTF('/models/City_Pack.gltf');
+    return (
+        <group {...props} dispose={null}>
+            <mesh
+                name="Car"
+                castShadow
+                geometry={nodes.Car.geometry}
+                material={materials['World ap']}
+                scale={.001}
+            />
+        </group>
+    );
+};
+
