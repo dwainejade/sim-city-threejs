@@ -17,7 +17,6 @@ const Car = ({ carId, start, destination, waypoints, color = 'orangered' }) => {
 
     useEffect(() => {
         const path = aStar(start, destination, waypoints);
-        console.log(start)
         if (path.length > 0) {
             setCurrentPath(path);
             if (path.length > 1) {
@@ -26,7 +25,7 @@ const Car = ({ carId, start, destination, waypoints, color = 'orangered' }) => {
                 setDirection(newDirection);
             }
         } else {
-            console.error("No path found from start to destination.");
+            console.warn("No path found from start to destination.");
         }
     }, [start, destination]);
 

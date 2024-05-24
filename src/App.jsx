@@ -9,7 +9,7 @@ const App = () => {
     <>
       <Canvas
         shadows dpr={[1, 2]}
-        camera={{ position: [200, 100, 100], fov: 20, zoom: 5, near: 1, far: 100000 }}
+        camera={{ position: [0, 100, 0], fov: 20, zoom: 3, near: 1, far: 100000 }}
         gl={{ logarithmicDepthBuffer: true }} >
 
         <Stats />

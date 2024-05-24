@@ -1,5 +1,5 @@
 import React from "react";
-import { OrbitControls, Sky } from '@react-three/drei';
+import { Center, OrbitControls, Sky } from '@react-three/drei';
 import Ground from "./Ground";
 import Lights from "./Lights";
 
@@ -21,12 +21,15 @@ const Scene = () => {
                 // maxPolarAngle={Math.PI / 2.5}
                 maxDistance={10000}
                 minDistance={15}
-                zoomSpeed={1}
-                enableRotate={false}
+                zoomSpeed={.25}
+            // enableRotate={false}
             />
             <Sky sunPosition={[100, 100, 100]} />
             <Lights />
-            <Ground />
+
+            <Center>
+                <Ground />
+            </Center>
         </>
     );
 };
