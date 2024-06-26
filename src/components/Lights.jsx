@@ -12,7 +12,7 @@ const Lights = () => {
                 intensity={2}
                 color="#ffffff"
                 castShadow
-                shadow-mapSize={[512, 512]}
+                // shadow-mapSize={[512, 512]}
                 // shadow-camera-near={.1}
                 // shadow-camera-far={10000}
                 // shadow-camera-top={1000}

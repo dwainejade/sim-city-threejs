@@ -3,21 +3,22 @@ import Car from './Car';
 import { useGridStore } from '../store/gridStore';
 import { getNeighboringRoadCell } from '../utils/helpers';
 
-const MAX_CARS = 1;
-const CARS_PER_APARTMENT = 2;
-const CAR_RETURN_DELAY = 1000; // Time in milliseconds before the car returns
+const MAX_CARS = 5;
+const CARS_PER_APARTMENT = 1;
+const CAR_SPAWN_DELAY = 500; // Time in milliseconds before the car spawns
+const CAR_RETURN_DELAY = 5000; // Time in milliseconds before the car returns
 
-const CAR_COLORS = [
-    '#fca60c', '#bb439a', '#c0dded', '#08a8e5', '#79ce5b', '#755d56', '#fcd413', '#a4a6ca', '#8e23b6', '#ee2265',
-    '#1fd1dc', '#1a5d31', '#331f94', '#e2785e', '#f7401d', '#244eb4', '#74a76b', '#116864', '#e7a69b', '#5c3830',
-    '#660ea0', '#fce186', '#138486', '#f090c8', '#5f8094', '#fcf35c', '#5c64c4', '#af4bc4', '#04a6a6', '#a3044c',
-    '#fc7804', '#ab73d3', '#da66cb', '#33a32b', '#d31b1a', '#0474d4', '#fc534c', '#fb5c14', '#3f3cac', '#44b42c',
-    '#3c3a3a'
-];
+// const CAR_COLORS = [
+//     '#fca60c', '#bb439a', '#c0dded', '#08a8e5', '#79ce5b', '#755d56', '#fcd413', '#a4a6ca', '#8e23b6', '#ee2265',
+//     '#1fd1dc', '#1a5d31', '#331f94', '#e2785e', '#f7401d', '#244eb4', '#74a76b', '#116864', '#e7a69b', '#5c3830',
+//     '#660ea0', '#fce186', '#138486', '#f090c8', '#5f8094', '#fcf35c', '#5c64c4', '#af4bc4', '#04a6a6', '#a3044c',
+//     '#fc7804', '#ab73d3', '#da66cb', '#33a32b', '#d31b1a', '#0474d4', '#fc534c', '#fb5c14', '#3f3cac', '#44b42c',
+//     '#3c3a3a'
+// ];
 
-const getRandomColor = () => {
-    return CAR_COLORS[Math.floor(Math.random() * CAR_COLORS.length)];
-};
+// const getRandomColor = () => {
+//     return CAR_COLORS[Math.floor(Math.random() * CAR_COLORS.length)];
+// };
 
 const CarManager = ({ waypoints }) => {
     const { cells } = useGridStore();
@@ -47,7 +48,7 @@ const CarManager = ({ waypoints }) => {
     }, [cells]);
 
     useEffect(() => {
-        carSpawnInterval.current = setInterval(spawnCar, 500); // Try to spawn a car every second
+        carSpawnInterval.current = setInterval(spawnCar, CAR_SPAWN_DELAY); // Try to spawn a car every second
         return () => clearInterval(carSpawnInterval.current);
     }, []);
 
@@ -73,8 +74,8 @@ const CarManager = ({ waypoints }) => {
         if (!destinationCell) return;
 
         const carId = `${randomApartment.row}-${randomApartment.col}-${Date.now()}`;
-        const carColor = getRandomColor();
-        setCars((prevCars) => [...prevCars, { id: carId, start: startCell, destination: destinationCell, color: carColor }]);
+
+        setCars((prevCars) => [...prevCars, { id: carId, start: startCell, destination: destinationCell }]);
         carCounts.current[apartmentKey] += 1;
     };
 
@@ -101,7 +102,6 @@ const CarManager = ({ waypoints }) => {
                     destination={car.destination}
                     waypoints={waypoints}
                     onArrival={handleCarArrival}
-                    color={car.color}
                 />
             ))}
         </>

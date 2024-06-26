@@ -1,5 +1,5 @@
 import React from "react";
-import { Center, OrbitControls, Sky } from '@react-three/drei';
+import { AccumulativeShadows, GizmoHelper, GizmoViewport, OrbitControls, RandomizedLight, Sky } from '@react-three/drei';
 import Ground from "./Ground";
 import Lights from "./Lights";
 
@@ -15,21 +15,21 @@ const Scene = () => {
 
     return (
         <>
-
             <OrbitControls
-                // maxAzimuthAngle={Math.PI / 4}
-                // maxPolarAngle={Math.PI / 2.5}
-                maxDistance={10000}
-                minDistance={15}
-                zoomSpeed={.25}
-            // enableRotate={false}
+                maxDistance={200}
+                minDistance={25}
+                zoomSpeed={.3}
+                panSpeed={.1}
+                makeDefault
             />
-            <Sky sunPosition={[100, 100, 100]} />
-            <Lights />
+            {/*TODO: add aix helper */}
+            <axesHelper args={[2]} position={[0, 1, 0]} />
 
-            <Center>
-                <Ground />
-            </Center>
+            <Lights />
+            <Sky sunPosition={[100, 100, 100]} />
+            <RandomizedLight castShadow amount={8} frames={130} position={[5, 5, -10]} />
+
+            <Ground />
         </>
     );
 };
