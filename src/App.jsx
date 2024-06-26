@@ -1,19 +1,26 @@
 import React from "react";
 import { Canvas } from "@react-three/fiber";
-import { Stats } from '@react-three/drei';
+import { Bvh, PerformanceMonitor, Stats } from '@react-three/drei';
 import Scene from "./components/Scene";
 import Menu from "./components/ui/Menu";
+import { Perf } from "r3f-perf";
 
 const App = () => {
+  const [dpr, setDpr] = React.useState(1);
+
   return (
     <>
       <Canvas
-        shadows dpr={[1, 2]}
-        camera={{ position: [200, 100, 100], fov: 20, zoom: 5, near: 1, far: 100000 }}
-        gl={{ logarithmicDepthBuffer: true }} >
+        shadows dpr={dpr}
+        camera={{ position: [60, 80, 130], fov: 50, zoom: 10, near: 1, far: 1000 }}
+        gl={{ antialias: true }} >
 
-        <Stats />
-        <Scene />
+        <Perf position="top-left" deepAnalyze />
+        <Bvh firstHitOnly>
+          <Scene />
+        </Bvh>
+
+        <PerformanceMonitor onIncline={() => setDpr(2)} onDecline={() => setDpr(1)} />
 
       </Canvas>
 

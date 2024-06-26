@@ -4,9 +4,10 @@ import { useThree } from '@react-three/fiber';
 import { useGridStore } from '../store/gridStore';
 import { useObjectStore } from '../store/objectStore';
 import { Apartment, Shop, Trees, Road2 } from './objects/CityPack';
+import CarManager from './CarManager';
 
 const Grid = () => {
-    const { gridSize, cells, initializeGrid, selectedCells, setSelectedCells, placeObject, clearCell } = useGridStore();
+    const { gridSize, cells, initializeGrid, selectedCells, setSelectedCells, placeObject, clearCell, roads, waypoints } = useGridStore();
     const { objects } = useObjectStore();
     const [dragging, setDragging] = useState(false);
     const [startCell, setStartCell] = useState(null);
@@ -16,6 +17,45 @@ const Grid = () => {
     useEffect(() => {
         if (!cells.length) initializeGrid(gridSize);
     }, [gridSize, initializeGrid]);
+
+    // useEffect(() => {
+    //     generateWaypoints();
+    // }, [roads]);
+
+    // const generateWaypoints = () => {
+    //     const waypointSet = new Set();
+
+    //     roads.forEach(({ row, col }) => {
+    //         if (isIntersection(row, col)) {
+    //             waypointSet.add(`${row},${col}`);
+    //         }
+    //     });
+
+    //     const waypointsArray = Array.from(waypointSet).map(str => {
+    //         const [row, col] = str.split(',').map(Number);
+    //         return { row, col };
+    //     });
+
+    //     setWaypoints(waypointsArray);
+    // };
+
+    const isIntersection = (row, col) => {
+        const neighbors = [
+            { row: row - 1, col },
+            { row: row + 1, col },
+            { row, col: col - 1 },
+            { row, col: col + 1 }
+        ];
+
+        let roadCount = 0;
+        neighbors.forEach(({ row, col }) => {
+            if (roads.some(road => road.row === row && road.col === col)) {
+                roadCount++;
+            }
+        });
+
+        return roadCount >= 2;
+    };
 
     const instances = useMemo(() => {
         if (cells.length === 0) return [];
@@ -39,7 +79,6 @@ const Grid = () => {
     const handlePointerDown = (e) => {
         if (e.button !== 0) return; // Only proceed for left mouse button
         e.stopPropagation();
-        console.log(e);
         const { rowIndex, colIndex } = getIntersectedCell(e);
         if (rowIndex !== null && colIndex !== null) {
             setDragging(true);
@@ -163,6 +202,17 @@ const Grid = () => {
                 }
                 return null;
             })}
+
+            {/* Render waypoints */}
+            {waypoints.map((waypoint, index) => (
+                <mesh key={index} position={[waypoint.col, 0.01, waypoint.row]}>
+                    <boxGeometry args={[.05, .001, .05]} />
+                    <meshStandardMaterial color="#f4f4f4" />
+                </mesh>
+            ))}
+
+            {/* Render cars */}
+            <CarManager waypoints={waypoints} />
         </group>
     );
 };
